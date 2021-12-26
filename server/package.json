@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^3.7.0",
     "apollo-server": "^3.5.0",
-    "graphql": "^15.8.0"
+    "graphql": "^15.8.0",
+    "prisma": "^3.7.0"
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.8",
