@@ -1,7 +1,6 @@
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User, Prisma } from "@prisma/client";
 
 import { Context } from "../../index";
 
@@ -70,6 +69,14 @@ export const authResolvers = {
         name,
         email,
         password: hashedPassword,
+      },
+    });
+
+    // Create user profile
+    await prisma.profile.create({
+      data: {
+        bio,
+        userId: user.id,
       },
     });
 
