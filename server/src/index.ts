@@ -9,7 +9,7 @@ import { getUserFromToken } from "./utils/getUserFromToken";
 // Environment variables
 dotenv.config();
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export interface Context {
   prisma: PrismaClient<
