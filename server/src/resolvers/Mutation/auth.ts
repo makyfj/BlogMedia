@@ -112,8 +112,6 @@ export const authResolvers = {
   ): Promise<UserPayload> => {
     const { email, password } = credentials;
 
-    console.log(credentials);
-
     const user = await prisma.user.findUnique({
       where: {
         email: email,

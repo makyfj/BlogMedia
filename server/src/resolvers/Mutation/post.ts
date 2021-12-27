@@ -19,8 +19,24 @@ export const postResolvers = {
   postCreate: async (
     _: any,
     { post }: PostArgs,
-    { prisma }: Context
+    { prisma, userId }: Context
   ): Promise<PostPayloadType> => {
+    // If user is not logged in, return error
+
+    console.log(userId);
+
+    if (!userId) {
+      return {
+        userErrors: [
+          {
+            message:
+              "Forbidden access - You must be logged in to create a post",
+          },
+        ],
+        post: null,
+      };
+    }
+
     const { title, content } = post;
 
     if (!title || !content) {
@@ -40,7 +56,7 @@ export const postResolvers = {
         data: {
           title,
           content,
-          userId: "ckxnvldnh00725kcmn9y5ge34",
+          userId: userId,
         },
       }),
     };

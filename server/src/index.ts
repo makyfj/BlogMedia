@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import { typeDefs } from "./schema";
 import { Query, Mutation } from "./resolvers";
+import { getUserFromToken } from "./utils/getUserFromToken";
 
 // Environment variables
 dotenv.config();
@@ -16,6 +17,7 @@ export interface Context {
     never,
     Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
   >;
+  userId: string;
 }
 
 const server = new ApolloServer({
@@ -24,8 +26,12 @@ const server = new ApolloServer({
     Query,
     Mutation,
   },
-  context: {
-    prisma,
+  context: async ({ req }: any): Promise<Context> => {
+    const userId = await getUserFromToken(req.headers.authorization);
+    return {
+      prisma,
+      userId,
+    };
   },
 });
 
