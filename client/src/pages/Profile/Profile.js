@@ -9,6 +9,7 @@ const GET_PROFILE = gql`
   query GetProfile($userId: ID!) {
     profile(userId: $userId) {
       bio
+      isMyProfile
       user {
         name
         email

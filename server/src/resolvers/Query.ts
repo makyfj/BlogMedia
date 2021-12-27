@@ -13,12 +13,25 @@ export const Query = {
     });
   },
 
-  profile: (_: any, { userId }: { userId: string }, { prisma }: Context) => {
-    return prisma.profile.findUnique({
+  profile: async (
+    _: any,
+    { userId }: { userId: string },
+    { prisma, userId: userIdAuth }: Context
+  ) => {
+    const isMyProfile = userIdAuth === userId;
+
+    const profile = await prisma.profile.findUnique({
       where: {
         userId: userId,
       },
     });
+
+    if (!profile) return null;
+
+    return {
+      ...profile,
+      isMyProfile,
+    };
   },
 
   posts: async (_: any, __: any, { prisma }: Context) => {
