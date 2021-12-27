@@ -15,8 +15,5 @@ Back-end
 Front-end
 
     - React
-    - Vite
     - Context
     - Apollo-client
-    - Tailwindcss
-    - TypeScript
