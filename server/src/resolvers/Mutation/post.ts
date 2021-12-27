@@ -1,5 +1,6 @@
 import { Context } from "../../index";
 import { Post, Prisma } from "@prisma/client";
+import { canUserMutatePost } from "../../utils/canUserMutatePost";
 
 interface PostArgs {
   post: {
@@ -22,8 +23,6 @@ export const postResolvers = {
     { prisma, userId }: Context
   ): Promise<PostPayloadType> => {
     // If user is not logged in, return error
-
-    console.log(userId);
 
     if (!userId) {
       return {
@@ -65,8 +64,32 @@ export const postResolvers = {
   postUpdate: async (
     _: any,
     { post, postId }: { postId: string; post: PostArgs["post"] },
-    { prisma }: Context
+    { prisma, userId }: Context
   ): Promise<PostPayloadType> => {
+    // If user is not logged in, return error
+    if (!userId) {
+      return {
+        userErrors: [
+          {
+            message:
+              "Forbidden access - You must be logged in to update a post",
+          },
+        ],
+        post: null,
+      };
+    }
+
+    // If user is not the owner of the post, return error
+    const error = await canUserMutatePost({
+      userId,
+      postId,
+      prisma,
+    });
+
+    if (error) {
+      return error;
+    }
+
     const { title, content } = post;
 
     if (!title && !content) {
@@ -125,8 +148,31 @@ export const postResolvers = {
   postDelete: async (
     _: any,
     { postId }: { postId: string },
-    { prisma }: Context
+    { prisma, userId }: Context
   ): Promise<PostPayloadType> => {
+    // If user is not logged in, return error
+    if (!userId) {
+      return {
+        userErrors: [
+          {
+            message:
+              "Forbidden access - You must be logged in to delete a post",
+          },
+        ],
+        post: null,
+      };
+    }
+
+    // If user is not the owner of the post, return error
+    const error = await canUserMutatePost({
+      userId,
+      postId,
+      prisma,
+    });
+
+    // If error, return error
+    if (error) return error;
+
     // If post doesn't exist, return error
     const existingPost = await prisma.post.findUnique({
       where: {
