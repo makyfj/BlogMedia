@@ -200,4 +200,85 @@ export const postResolvers = {
       }),
     };
   },
+
+  postPublish: async (
+    _: any,
+    { postId }: { postId: string },
+    { prisma, userId }: Context
+  ): Promise<PostPayloadType> => {
+    if (!userId) {
+      return {
+        userErrors: [
+          {
+            message:
+              "Forbidden access - You must be logged in to publish a post",
+          },
+        ],
+        post: null,
+      };
+    }
+
+    const error = await canUserMutatePost({
+      userId,
+      postId,
+      prisma,
+    });
+
+    if (error) return error;
+
+    const updatePostPublish = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        published: true,
+      },
+    });
+
+    return {
+      userErrors: [],
+      post: updatePostPublish,
+    };
+  },
+
+  postUnpublish: async (
+    _: any,
+    { postId }: { postId: string },
+    { prisma, userId }: Context
+  ): Promise<PostPayloadType> => {
+    // If user is not logged in, return error
+    if (!userId) {
+      return {
+        userErrors: [
+          {
+            message:
+              "Forbidden access - You must be logged in to unpublish a post",
+          },
+        ],
+        post: null,
+      };
+    }
+
+    const error = await canUserMutatePost({
+      userId,
+      postId,
+      prisma,
+    });
+
+    if (error) return error;
+
+    const updatePostUnpublish = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        published: false,
+      },
+    });
+
+    return {
+      userErrors: [],
+      post: updatePostUnpublish,
+    };
+  },
 };
