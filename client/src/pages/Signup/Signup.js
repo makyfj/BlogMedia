@@ -2,6 +2,8 @@ import Button from "@restart/ui/esm/Button";
 import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Form } from "react-bootstrap";
+import { useHistory } from "react-router";
+import jwtDecode from "jwt-decode";
 
 const SIGNUP = gql`
   mutation Signup(
@@ -26,6 +28,8 @@ const SIGNUP = gql`
 export default function Signup() {
   const [signup, { data, loading }] = useMutation(SIGNUP);
 
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -42,8 +46,6 @@ export default function Signup() {
     });
   };
 
-  console.log(data);
-
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -55,9 +57,14 @@ export default function Signup() {
       if (data.signup.token) {
         localStorage.setItem("token", data.signup.token);
         setError(null);
+
+        const token = localStorage.getItem("token");
+        const decoded = jwtDecode(token);
+
+        history.push(`/profile/${decoded.userId}`);
       }
     }
-  }, [data]);
+  }, [data, history]);
 
   return (
     <div>
