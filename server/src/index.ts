@@ -3,7 +3,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import dotenv from "dotenv";
 
 import { typeDefs } from "./schema";
-import { Query, Mutation, Profile } from "./resolvers";
+import { Query, Mutation, Profile, Post, User } from "./resolvers";
 import { getUserFromToken } from "./utils/getUserFromToken";
 
 // Environment variables
@@ -26,6 +26,8 @@ const server = new ApolloServer({
     Query,
     Mutation,
     Profile,
+    Post,
+    User,
   },
   context: async ({ req }: any): Promise<Context> => {
     const userId = await getUserFromToken(req.headers.authorization);
