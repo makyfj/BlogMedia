@@ -53,7 +53,7 @@ export default function Profile() {
           <h1>{profile.user.name}</h1>
           <p>{profile.bio}</p>
         </div>
-        <div>{"profile" ? <AddPostModal /> : null}</div>
+        <div>{profile.isMyProfile ? <AddPostModal /> : null}</div>
       </div>
       <div>
         {profile.user.posts.map((post) => {
