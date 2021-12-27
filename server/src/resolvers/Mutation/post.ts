@@ -226,18 +226,16 @@ export const postResolvers = {
 
     if (error) return error;
 
-    const updatePostPublish = await prisma.post.update({
-      where: {
-        id: postId,
-      },
-      data: {
-        published: true,
-      },
-    });
-
     return {
       userErrors: [],
-      post: updatePostPublish,
+      post: prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          published: true,
+        },
+      }),
     };
   },
 
@@ -267,18 +265,16 @@ export const postResolvers = {
 
     if (error) return error;
 
-    const updatePostUnpublish = await prisma.post.update({
-      where: {
-        id: postId,
-      },
-      data: {
-        published: false,
-      },
-    });
-
     return {
       userErrors: [],
-      post: updatePostUnpublish,
+      post: prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          published: false,
+        },
+      }),
     };
   },
 };

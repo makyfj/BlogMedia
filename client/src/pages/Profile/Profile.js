@@ -14,9 +14,11 @@ const GET_PROFILE = gql`
         name
         email
         posts {
+          id
           content
           title
           createdAt
+          published
         }
       }
     }
@@ -65,6 +67,8 @@ export default function Profile() {
               date={post.createdAt}
               id={post.id}
               user={profile.user.name}
+              published={post.published}
+              isMyProfile={profile.isMyProfile}
             />
           );
         })}
