@@ -14,7 +14,7 @@ export const typeDefs = gql`
       email: String!
       password: String!
       name: String!
-      bio: String
+      bio: String!
     ): AuthPayload!
   }
 
@@ -52,7 +52,7 @@ export const typeDefs = gql`
 
   type AuthPayload {
     userErrors: [UserError!]!
-    user: User
+    token: String!
   }
 
   input PostInput {

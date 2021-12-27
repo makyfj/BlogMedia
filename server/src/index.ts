@@ -1,8 +1,12 @@
 import { ApolloServer } from "apollo-server";
 import { PrismaClient, Prisma } from "@prisma/client";
+import dotenv from "dotenv";
 
 import { typeDefs } from "./schema";
 import { Query, Mutation } from "./resolvers";
+
+// Environment variables
+dotenv.config();
 
 const prisma = new PrismaClient();
 
