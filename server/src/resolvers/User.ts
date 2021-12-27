@@ -25,7 +25,7 @@ export const User = {
       // Return only published posts
       return prisma.post.findMany({
         where: {
-          id: parent.id,
+          userId: parent.id,
           published: true,
         },
         orderBy: [
