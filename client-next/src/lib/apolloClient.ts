@@ -5,9 +5,10 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
-import { concatPagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
+
+// import { relayStylePagination } from "@apollo/client/utilities";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
@@ -22,6 +23,13 @@ function createApolloClient() {
     }),
     cache: new InMemoryCache({
       // typePolicies is not required to use Apollo with Next.js - only for doing pagination.
+      // typePolicies: {
+      //   Query: {
+      //     fields: {
+      //       posts: relayStylePagination(),
+      //     },
+      //   },
+      // },
     }),
   });
 }
