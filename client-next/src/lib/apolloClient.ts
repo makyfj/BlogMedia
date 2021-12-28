@@ -1,12 +1,15 @@
 import { useMemo } from "react";
 import {
   ApolloClient,
+  createHttpLink,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
+
+import { setContext } from "@apollo/client/link/context";
 
 // import { relayStylePagination } from "@apollo/client/utilities";
 
@@ -15,12 +18,31 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 function createApolloClient() {
+  const httpLink = new HttpLink({
+    uri: "https://countries.trevorblades.com",
+    credentials: "same-origin",
+  });
+
+  const authLink = setContext((_, { headers }) => {
+    const ISSERVER = typeof window === "undefined";
+
+    let token;
+
+    if (!ISSERVER) {
+      // Access localStorage
+      token = localStorage.getItem("token");
+    }
+    return {
+      headers: {
+        ...headers,
+        authorization: token,
+      },
+    };
+  });
+
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: new HttpLink({
-      uri: "https://countries.trevorblades.com",
-      credentials: "same-origin",
-    }),
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache({
       // typePolicies is not required to use Apollo with Next.js - only for doing pagination.
       // typePolicies: {
