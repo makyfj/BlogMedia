@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="h-auto bg-zinc-50 dark:bg-zinc-900">
           {children}
           <footer className="text-center">
-            Copyright &copy; 2021 - Tobster
+            Copyright &copy; 2021 - BlogMedia
           </footer>
         </div>
       </div>

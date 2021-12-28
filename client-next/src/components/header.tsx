@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { SunIcon, MoonIcon, HomeIcon } from "@heroicons/react/solid";
+import {
+  SunIcon,
+  MoonIcon,
+  HomeIcon,
+  LoginIcon,
+  LogoutIcon,
+} from "@heroicons/react/solid";
 import Link from "next/link";
 
 const Header = () => {
@@ -26,6 +32,20 @@ const Header = () => {
         <Link href="/">
           <a>
             <HomeIcon className="w-10 h-10" />
+          </a>
+        </Link>
+      </li>
+      <li>
+        <Link href="/">
+          <a>
+            <LoginIcon className="w-10 h-10" />
+          </a>
+        </Link>
+      </li>
+      <li>
+        <Link href="/">
+          <a>
+            <LogoutIcon className="w-10 h-10" />
           </a>
         </Link>
       </li>
