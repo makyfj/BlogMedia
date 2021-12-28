@@ -14,6 +14,8 @@ Back-end
 
 Front-end
 
-    - React
+    - NextJS
     - Context
     - Apollo-client
+    - TypeScript
+    - Tailwindcss
