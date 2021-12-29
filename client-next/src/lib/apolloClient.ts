@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import {
   ApolloClient,
-  createHttpLink,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
@@ -19,7 +18,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 function createApolloClient() {
   const httpLink = new HttpLink({
-    uri: "https://countries.trevorblades.com",
+    uri: `${process.env.API_URL}`,
     credentials: "same-origin",
   });
 

@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
     <>
       <div className="h-screen bg-zinc-50 dark:bg-zinc-900">
         <Header />
-        <div className="h-auto bg-zinc-50 dark:bg-zinc-900">
+        <div className="h-auto bg-zinc-50 dark:bg-zinc-900 relative">
           {children}
           <footer className="text-center">
             Copyright &copy; 2021 - BlogMedia

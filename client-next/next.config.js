@@ -2,6 +2,6 @@
 module.exports = {
   reactStrictMode: true,
   env: {
-    API_URL: "http://localhost:4000/graphql",
+    API_URL: "https://blog-media-777.herokuapp.com",
   },
 };

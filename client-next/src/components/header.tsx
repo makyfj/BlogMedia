@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import {
-  SunIcon,
-  MoonIcon,
-  HomeIcon,
-  LoginIcon,
-  LogoutIcon,
-} from "@heroicons/react/solid";
+import { SunIcon, MoonIcon, HomeIcon, UserIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
 const Header = () => {
@@ -27,42 +21,37 @@ const Header = () => {
   if (!mounted) return null;
 
   return (
-    <ul className="flex flex-row p-2 justify-evenly">
-      <li>
-        <Link href="/">
-          <a>
-            <HomeIcon className="w-10 h-10" />
-          </a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/">
-          <a>
-            <LoginIcon className="w-10 h-10" />
-          </a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/">
-          <a>
-            <LogoutIcon className="w-10 h-10" />
-          </a>
-        </Link>
-      </li>
-      {theme === "dark" ? (
+    <div className="sticky top-0 z-50">
+      <ul className="flex flex-row p-2 justify-evenly">
         <li>
-          <button onClick={toggleTheme}>
-            <MoonIcon className="w-10 h-10" />
-          </button>
+          <Link href="/">
+            <a>
+              <HomeIcon className="w-10 h-10" />
+            </a>
+          </Link>
         </li>
-      ) : (
         <li>
-          <button onClick={toggleTheme}>
-            <SunIcon className="w-10 h-10" />
-          </button>
+          <Link href="/signup">
+            <a>
+              <UserIcon className="w-10 h-10" />
+            </a>
+          </Link>
         </li>
-      )}
-    </ul>
+        {theme === "dark" ? (
+          <li>
+            <button onClick={toggleTheme}>
+              <MoonIcon className="w-10 h-10" />
+            </button>
+          </li>
+        ) : (
+          <li>
+            <button onClick={toggleTheme}>
+              <SunIcon className="w-10 h-10" />
+            </button>
+          </li>
+        )}
+      </ul>
+    </div>
   );
 };
 
