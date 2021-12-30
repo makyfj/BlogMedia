@@ -49,6 +49,24 @@ export const authResolvers = {
       };
     }
 
+    // Checks if user is already registered
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (existingUser) {
+      return {
+        userErrors: [
+          {
+            message: "User already registered",
+          },
+        ],
+        token: null,
+      };
+    }
+
     const passwordIsValid = validator.isLength(password, { min: 5 });
 
     if (!passwordIsValid) {
@@ -91,7 +109,7 @@ export const authResolvers = {
       },
     });
 
-    const token: string = await jwt.sign(
+    const token: string = jwt.sign(
       {
         userId: user.id,
       },
@@ -142,7 +160,7 @@ export const authResolvers = {
       };
     }
 
-    const token: string = await jwt.sign(
+    const token: string = jwt.sign(
       { userId: user.id },
       process.env.JWT_SECRET as string,
       { expiresIn: "2d" }

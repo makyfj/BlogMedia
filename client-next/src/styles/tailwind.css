@@ -26,6 +26,18 @@
   }
 
   .input {
-    @apply bg-brand-700 dark:bg-brand-200 text-brand-900 dark:text-brand-100 focus:border-brand-100 dark:focus:border-brand-900 focus:ring-brand-100 dark:focus:ring-brand-900 rounded;
+    @apply bg-brand-700 dark:bg-brand-200 w-60 text-brand-900 dark:text-brand-100 focus:border-brand-100 dark:focus:border-brand-900 focus:ring-brand-100 dark:focus:ring-brand-900 rounded;
+  }
+
+  .button-container {
+    @apply flex flex-col justify-center items-center col-span-2;
+  }
+
+  .button {
+    @apply w-60 px-4 py-2 font-bold border border-transparent bg-brand-900 dark:bg-brand-100 rounded hover:bg-brand-700 dark:hover:bg-brand-500 focus:ring-2 focus:ring-brand-600;
+  }
+
+  .input-error-form {
+    @apply text-center pt-1 text-red-600 dark:text-red-400 font-bold;
   }
 }

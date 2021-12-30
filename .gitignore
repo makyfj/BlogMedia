@@ -2,7 +2,6 @@ server/node_modules
 server/dist
 server/.env
 
-client/node_modules
-client/.env
+client
 client-next/node_modules
 client-next/.env
