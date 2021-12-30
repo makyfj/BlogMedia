@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import jwtDecode from "jwt-decode";
 
 import ErrorMutation from "../components/errorMutation";
+import Spinner from "../components/spinner";
 
-const SIGN_UP = gql`
+const SIGN_UP_MUTATION = gql`
   mutation Signup(
     $email: String!
     $password: String!
@@ -39,7 +39,7 @@ const SignUpPage = () => {
 
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
-  const [signup, { data }] = useMutation(SIGN_UP);
+  const [signup, { data, loading, reset }] = useMutation(SIGN_UP_MUTATION);
 
   const {
     register,
@@ -53,20 +53,23 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (data) {
-      if (data.signup.userErrors.length) {
-        setErrorMutation(data.signup.userErrors[0].message);
-      }
-      if (data.signup.token) {
-        localStorage.setItem("token", data.signup.token);
+      const { token, userErrors } = data.signup;
+
+      if (userErrors.length) {
+        setErrorMutation(userErrors[0].message);
+      } else {
         setErrorMutation(null);
+      }
 
-        const token: any = localStorage.getItem("token");
-        const decoded = jwtDecode(token);
+      if (token === null) {
+        reset();
+      }
 
-        router.push("/");
+      if (token) {
+        localStorage.setItem("token", token);
       }
     }
-  }, [data, router]);
+  }, [data, reset, router]);
 
   return (
     <>
@@ -80,6 +83,7 @@ const SignUpPage = () => {
 
       <div className="form-container">
         {errorMutation && <ErrorMutation errorMutation={errorMutation} />}
+        {loading && <Spinner />}
         <div className="flex justify-center">
           <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <div className="label">
