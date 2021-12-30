@@ -1,5 +1,5 @@
 {
-  "name": "client-next",
+  "name": "client-blog-media",
   "private": true,
   "scripts": {
     "dev": "next dev",
