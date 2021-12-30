@@ -67,6 +67,7 @@ const SignUpPage = () => {
 
       if (token) {
         localStorage.setItem("token", token);
+        router.push("/");
       }
     }
   }, [data, reset, router]);

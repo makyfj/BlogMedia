@@ -5,3 +5,4 @@ server/.env
 client
 client-next/node_modules
 client-next/.env
+client-next/.next
