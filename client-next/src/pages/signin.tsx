@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 
 import ErrorMutation from "../components/errorMutation";
 import Spinner from "../components/spinner";
+import { ME_QUERY } from "../components/header";
 
 const SIGN_IN_MUTATION = gql`
   mutation Signin($email: String!, $password: String!) {
@@ -28,7 +29,9 @@ const SignInPage = () => {
 
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
-  const [signin, { data, loading, reset }] = useMutation(SIGN_IN_MUTATION);
+  const [signin, { data, loading, reset }] = useMutation(SIGN_IN_MUTATION, {
+    refetchQueries: [ME_QUERY],
+  });
 
   const {
     register,
@@ -41,14 +44,12 @@ const SignInPage = () => {
   };
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       const { token, userErrors } = data.signin;
 
       if (userErrors.length) {
         setErrorMutation(userErrors[0].message);
-      } else {
-        setErrorMutation(null);
+        reset();
       }
 
       if (token === null) {
@@ -56,6 +57,7 @@ const SignInPage = () => {
       }
 
       if (token) {
+        setErrorMutation(null);
         localStorage.setItem("token", token);
         router.push("/");
       }

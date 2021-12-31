@@ -57,6 +57,7 @@ const SignUpPage = () => {
 
       if (userErrors.length) {
         setErrorMutation(userErrors[0].message);
+        reset();
       } else {
         setErrorMutation(null);
       }
