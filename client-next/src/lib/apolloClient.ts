@@ -14,7 +14,7 @@ import { setContext } from "@apollo/client/link/context";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
+export let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 function createApolloClient() {
   const httpLink = new HttpLink({

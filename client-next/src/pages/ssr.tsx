@@ -1,7 +1,12 @@
 import React from "react";
 
 const SSRPage = () => {
-  return <div></div>;
+  return (
+    <div className="text-center font-bold">
+      Server Side Rendering Example - Check Github code for comments in
+      pages/ssr.tsx
+    </div>
+  );
 };
 
 export default SSRPage;

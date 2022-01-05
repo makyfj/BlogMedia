@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 
 import ErrorMutation from "../components/errorMutation";
 import Spinner from "../components/spinner";
-import { ME_QUERY } from "../components/header";
 
 const SIGN_IN_MUTATION = gql`
   mutation Signin($email: String!, $password: String!) {
@@ -30,7 +29,7 @@ const SignInPage = () => {
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
   const [signin, { data, loading, reset }] = useMutation(SIGN_IN_MUTATION, {
-    refetchQueries: [ME_QUERY],
+    refetchQueries: ["Me"],
   });
 
   const {
@@ -39,7 +38,11 @@ const SignInPage = () => {
     formState: { errors },
   } = useForm<SignInInputs>();
 
-  const onSubmit: SubmitHandler<SignInInputs> = (data) => {
+  if (loading) {
+    console.log("Loading");
+  }
+
+  const onSubmit: SubmitHandler<SignInInputs> = async (data) => {
     signin({ variables: data });
   };
 
@@ -47,22 +50,20 @@ const SignInPage = () => {
     if (data) {
       const { token, userErrors } = data.signin;
 
-      if (userErrors.length) {
+      if (userErrors.length > 0) {
         setErrorMutation(userErrors[0].message);
-        reset();
       }
 
-      if (token === null) {
-        reset();
-      }
-
-      if (token) {
-        setErrorMutation(null);
+      if (token !== null) {
         localStorage.setItem("token", token);
         router.push("/");
       }
+
+      if (token === null) {
+        () => reset();
+      }
     }
-  }, [data, reset, router]);
+  }, [data, router, reset]);
 
   return (
     <>

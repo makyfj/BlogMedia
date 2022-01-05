@@ -40,4 +40,9 @@
   .input-error-form {
     @apply text-center pt-1 text-red-600 dark:text-red-400 font-bold;
   }
+
+  /* Icons Header */
+  .icon-header {
+    @apply w-10 h-10 text-brand-500 dark:text-brand-200 bg-brand-900 dark:dark-bg-brand-100;
+  }
 }
