@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Link from "next/link";
 import { UserIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useQuery, gql } from "@apollo/client";
@@ -7,33 +6,24 @@ import { useRouter } from "next/router";
 
 import { apolloClient } from "../lib/apolloClient";
 import Spinner from "./spinner";
-import { decode } from "../lib/decodeToken";
 
-// export const ME_QUERY = gql`
-//   query Me {
-//     me {
-//       id
-//       name
-//     }
-//   }
-// `;
+export const ME_QUERY = gql`
+  query Me {
+    me {
+      id
+      name
+    }
+  }
+`;
 
 const UserDropdown = () => {
-  // const { data, loading, error, refetch } = useQuery(ME_QUERY);
+  const { data, loading, error } = useQuery(ME_QUERY);
 
-  let token;
-
-  if (localStorage) {
-    token = localStorage.getItem("token");
-  }
-
-  let userId: any = "";
-
-  if (token !== "") {
-    userId = decode(token);
-  }
-
+  if (loading) return <Spinner />;
+  if (error) return <p>{error}</p>;
   const router = useRouter();
+
+  const { me } = data;
 
   const onLogoutHandler = () => {
     if (apolloClient) {
@@ -45,17 +35,16 @@ const UserDropdown = () => {
 
   return (
     <>
-      {userId ? (
+      {me ? (
         <li className="flex flex-col justify-center  text-brand-500 dark:text-brand-200 capitalize rounded bg-brand-900 dark:bg-brand-100">
           <Menu>
             <Menu.Button className="w-auto px-2 font-bold text-2xl capitalize flex justify-center items-center">
-              <UserIcon className="w-8 h-8" />
-              <ChevronDownIcon className="h-8 w-8" />
+              {me.name} <ChevronDownIcon className="h-8 w-8" />
             </Menu.Button>
             <Menu.Items className="flex flex-col gap-1 justify-center items-center">
               <Menu.Item>
                 {({ active }) => (
-                  <Link href={`/user/${userId}`}>
+                  <Link href={`/user/${me.id}`}>
                     <a className={`${active && "bg-blue-500"}`}>Profile</a>
                   </Link>
                 )}
