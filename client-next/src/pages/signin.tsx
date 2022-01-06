@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 
-import ErrorMutation from "../components/errorMutation";
 import Spinner from "../components/spinner";
+import ErrorMutation from "../components/errorMutation";
 
 const SIGN_IN_MUTATION = gql`
   mutation Signin($email: String!, $password: String!) {
@@ -26,10 +25,16 @@ interface SignInInputs {
 const SignInPage = () => {
   const router = useRouter();
 
-  const [errorMutation, setErrorMutation] = useState<string | null>(null);
-
-  const [signin, { data, loading, reset }] = useMutation(SIGN_IN_MUTATION, {
-    refetchQueries: ["Me"],
+  const [signin, { loading, error, data }] = useMutation(SIGN_IN_MUTATION, {
+    onCompleted({ signin }) {
+      if (signin) {
+        const { token } = signin;
+        if (token !== null) {
+          localStorage.setItem("token", token as string);
+          router.push("/");
+        }
+      }
+    },
   });
 
   const {
@@ -39,31 +44,16 @@ const SignInPage = () => {
   } = useForm<SignInInputs>();
 
   if (loading) {
-    console.log("Loading");
+    console.log();
+  }
+
+  if (error) {
+    console.log();
   }
 
   const onSubmit: SubmitHandler<SignInInputs> = async (data) => {
     signin({ variables: data });
   };
-
-  useEffect(() => {
-    if (data) {
-      const { token, userErrors } = data.signin;
-
-      if (userErrors.length > 0) {
-        setErrorMutation(userErrors[0].message);
-      }
-
-      if (token !== null) {
-        localStorage.setItem("token", token);
-        router.push("/");
-      }
-
-      if (token === null) {
-        () => reset();
-      }
-    }
-  }, [data, router, reset]);
 
   return (
     <>
@@ -76,7 +66,9 @@ const SignInPage = () => {
       </p>
 
       <div className="form-container">
-        {errorMutation && <ErrorMutation errorMutation={errorMutation} />}
+        {data && data.signin.userErrors && (
+          <ErrorMutation errorMutation={data.signin.userErrors[0]?.message} />
+        )}
         {loading && <Spinner />}
         <div className="flex justify-center">
           <form className="form" onSubmit={handleSubmit(onSubmit)}>

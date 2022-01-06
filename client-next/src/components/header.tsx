@@ -54,17 +54,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// {me !== undefined ? (
-//   <li>
-//     <UserDropdown name={me.name as string} id={me.id} />
-//   </li>
-// ) : (
-//   <li>
-//     <Link href="/signup">
-//       <a>
-//         <UserIcon className="w-10 h-10" />
-//       </a>
-//     </Link>
-//   </li>
-// )}
